@@ -1,5 +1,6 @@
 .feed {
   height: 100vh;
+  height: 100dvh;
   overflow-y: scroll;
   scroll-snap-type: y mandatory;
   -webkit-overflow-scrolling: touch;
@@ -8,6 +9,7 @@
 
 .card {
   height: 100vh;
+  height: 100dvh;
   scroll-snap-align: start;
   position: relative;
   overflow: hidden;
