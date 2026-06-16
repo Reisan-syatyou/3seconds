@@ -1,0 +1,17 @@
+{
+  "name": "3秒",
+  "short_name": "3秒",
+  "description": "3秒でつながる、3秒で伝わる",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0f0f0f",
+  "theme_color": "#ff4d6d",
+  "icons": [
+    {
+      "src": "/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}
