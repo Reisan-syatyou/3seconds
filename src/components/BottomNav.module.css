@@ -4,13 +4,12 @@
   left: 0;
   right: 0;
   height: 64px;
-  background: rgba(10, 10, 10, 0.95);
-  border-top: 1px solid #1e1e1e;
+  background: linear-gradient(transparent, rgba(0, 0, 0, 0.6));
+  border-top: none;
   display: flex;
   align-items: center;
   justify-content: space-around;
   z-index: 100;
-  backdrop-filter: blur(8px);
 }
 
 .item {
@@ -18,17 +17,18 @@
   flex-direction: column;
   align-items: center;
   gap: 3px;
-  color: #555;
+  color: rgba(255, 255, 255, 0.6);
   text-decoration: none;
   font-size: 0.65rem;
   padding: 8px 20px;
   transition: color 0.15s;
+  text-shadow: 0 1px 3px rgba(0,0,0,0.8);
 }
 
 .item:hover {
-  color: #888;
+  color: rgba(255, 255, 255, 0.85);
 }
 
 .active {
-  color: #ff4d6d;
+  color: #fff;
 }
