@@ -4,7 +4,108 @@ import { useAuth } from '../contexts/AuthContext'
 import BottomNav from '../components/BottomNav'
 import styles from './FeedPage.module.css'
 
-function VideoCard({ post, likeCount, liked, onToggleLike }) {
+function CommentSheet({ postId, user, onClose, onCountChange }) {
+  const [comments, setComments] = useState([])
+  const [body, setBody] = useState('')
+  const [loading, setLoading] = useState(true)
+  const [submitting, setSubmitting] = useState(false)
+  const inputRef = useRef(null)
+
+  useEffect(() => {
+    async function fetchComments() {
+      const { data } = await supabase
+        .from('comments')
+        .select('*, profiles(username)')
+        .eq('post_id', postId)
+        .order('created_at', { ascending: true })
+      setComments(data ?? [])
+      setLoading(false)
+    }
+    fetchComments()
+    setTimeout(() => inputRef.current?.focus(), 350)
+  }, [postId])
+
+  async function handleSubmit(e) {
+    e.preventDefault()
+    if (!body.trim() || !user || submitting) return
+    setSubmitting(true)
+    const { data, error } = await supabase
+      .from('comments')
+      .insert({ post_id: postId, user_id: user.id, body: body.trim() })
+      .select('*, profiles(username)')
+      .single()
+    if (!error && data) {
+      setComments(prev => [...prev, data])
+      onCountChange(postId, 1)
+    }
+    setBody('')
+    setSubmitting(false)
+  }
+
+  async function handleDelete(commentId) {
+    await supabase.from('comments').delete().eq('id', commentId)
+    setComments(prev => prev.filter(c => c.id !== commentId))
+    onCountChange(postId, -1)
+  }
+
+  return (
+    <div className={styles.sheetOverlay} onClick={onClose}>
+      <div className={styles.sheet} onClick={e => e.stopPropagation()}>
+        <div className={styles.sheetHandle} />
+        <h3 className={styles.sheetTitle}>コメント</h3>
+        <div className={styles.commentList}>
+          {loading ? (
+            <p className={styles.sheetEmpty}>読み込み中...</p>
+          ) : comments.length === 0 ? (
+            <p className={styles.sheetEmpty}>まだコメントがありません</p>
+          ) : (
+            comments.map(c => (
+              <div key={c.id} className={styles.commentItem}>
+                <div className={styles.commentAvatar}>
+                  {(c.profiles?.username ?? '?')[0].toUpperCase()}
+                </div>
+                <div className={styles.commentBody}>
+                  <span className={styles.commentUser}>@{c.profiles?.username ?? 'unknown'}</span>
+                  <p className={styles.commentText}>{c.body}</p>
+                </div>
+                {user?.id === c.user_id && (
+                  <button
+                    className={styles.deleteBtn}
+                    onClick={() => handleDelete(c.id)}
+                    aria-label="削除"
+                  >✕</button>
+                )}
+              </div>
+            ))
+          )}
+        </div>
+        {user ? (
+          <form className={styles.commentForm} onSubmit={handleSubmit}>
+            <input
+              ref={inputRef}
+              className={styles.commentInput}
+              value={body}
+              onChange={e => setBody(e.target.value)}
+              placeholder="コメントを追加..."
+              maxLength={200}
+            />
+            <button
+              type="submit"
+              className={styles.commentSend}
+              disabled={!body.trim() || submitting}
+            >送信</button>
+          </form>
+        ) : (
+          <p className={styles.sheetEmpty} style={{ padding: '12px 16px' }}>
+            コメントするにはログインしてください
+          </p>
+        )}
+      </div>
+    </div>
+  )
+}
+
+function VideoCard({ post, likeCount, liked, onToggleLike, commentCount, onOpenComments }) {
   const videoRef = useRef(null)
   const cardRef = useRef(null)
   const [muted, setMuted] = useState(true)
@@ -92,7 +193,6 @@ function VideoCard({ post, likeCount, liked, onToggleLike }) {
         )}
       </button>
 
-      {/* Like button */}
       <div className={styles.actions}>
         <button
           className={`${styles.likeBtn} ${liked ? styles.likeBtnActive : ''}`}
@@ -112,6 +212,17 @@ function VideoCard({ post, likeCount, liked, onToggleLike }) {
           </svg>
           <span className={styles.likeCount}>{likeCount > 0 ? likeCount : ''}</span>
         </button>
+
+        <button
+          className={styles.commentBtn}
+          onClick={() => onOpenComments(post.id)}
+          aria-label="コメント"
+        >
+          <svg viewBox="0 0 24 24" fill="currentColor" width="28" height="28">
+            <path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z"/>
+          </svg>
+          <span className={styles.commentCount}>{commentCount > 0 ? commentCount : ''}</span>
+        </button>
       </div>
 
       <div className={styles.overlay}>
@@ -127,6 +238,8 @@ export default function FeedPage() {
   const [posts, setPosts] = useState([])
   const [likeCounts, setLikeCounts] = useState({})
   const [likedSet, setLikedSet] = useState(new Set())
+  const [commentCounts, setCommentCounts] = useState({})
+  const [activeCommentPostId, setActiveCommentPostId] = useState(null)
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
@@ -141,10 +254,10 @@ export default function FeedPage() {
 
       const postIds = postsData.map(p => p.id)
 
-      const { data: likesData } = await supabase
-        .from('likes')
-        .select('post_id, user_id')
-        .in('post_id', postIds)
+      const [{ data: likesData }, { data: commentsData }] = await Promise.all([
+        supabase.from('likes').select('post_id, user_id').in('post_id', postIds),
+        supabase.from('comments').select('post_id').in('post_id', postIds),
+      ])
 
       const counts = {}
       const myLikes = new Set()
@@ -153,9 +266,15 @@ export default function FeedPage() {
         if (like.user_id === user?.id) myLikes.add(like.post_id)
       }
 
+      const cCounts = {}
+      for (const c of commentsData ?? []) {
+        cCounts[c.post_id] = (cCounts[c.post_id] ?? 0) + 1
+      }
+
       setPosts(postsData)
       setLikeCounts(counts)
       setLikedSet(myLikes)
+      setCommentCounts(cCounts)
       setLoading(false)
     }
     load()
@@ -163,8 +282,6 @@ export default function FeedPage() {
 
   const handleToggleLike = useCallback(async (postId, isLiked) => {
     if (!user) return
-
-    // optimistic update
     setLikedSet(prev => {
       const next = new Set(prev)
       isLiked ? next.delete(postId) : next.add(postId)
@@ -174,13 +291,19 @@ export default function FeedPage() {
       ...prev,
       [postId]: Math.max(0, (prev[postId] ?? 0) + (isLiked ? -1 : 1)),
     }))
-
     if (isLiked) {
       await supabase.from('likes').delete().match({ post_id: postId, user_id: user.id })
     } else {
       await supabase.from('likes').insert({ post_id: postId, user_id: user.id })
     }
   }, [user])
+
+  const handleCommentCountChange = useCallback((postId, delta) => {
+    setCommentCounts(prev => ({
+      ...prev,
+      [postId]: Math.max(0, (prev[postId] ?? 0) + delta),
+    }))
+  }, [])
 
   if (loading) return (
     <div className={styles.center}>
@@ -205,8 +328,18 @@ export default function FeedPage() {
           likeCount={likeCounts[post.id] ?? 0}
           liked={likedSet.has(post.id)}
           onToggleLike={handleToggleLike}
+          commentCount={commentCounts[post.id] ?? 0}
+          onOpenComments={setActiveCommentPostId}
         />
       ))}
+      {activeCommentPostId && (
+        <CommentSheet
+          postId={activeCommentPostId}
+          user={user}
+          onClose={() => setActiveCommentPostId(null)}
+          onCountChange={handleCommentCountChange}
+        />
+      )}
       <BottomNav />
     </div>
   )
