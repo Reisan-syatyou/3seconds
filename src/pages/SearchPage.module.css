@@ -13,6 +13,7 @@
   align-items: center;
   gap: 10px;
   padding: 16px;
+  padding-top: max(16px, calc(env(safe-area-inset-top) + 8px));
   background: #0a0a0a;
   border-bottom: 1px solid #1a1a1a;
   z-index: 10;
