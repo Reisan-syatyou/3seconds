@@ -187,7 +187,7 @@
   position: fixed;
   inset: 0;
   background: rgba(0, 0, 0, 0.5);
-  z-index: 100;
+  z-index: 200;
   display: flex;
   align-items: flex-end;
 }
@@ -307,7 +307,7 @@
   padding: 12px 16px;
   border-top: 1px solid rgba(255,255,255,0.08);
   flex-shrink: 0;
-  padding-bottom: max(12px, env(safe-area-inset-bottom));
+  padding-bottom: max(76px, calc(64px + env(safe-area-inset-bottom)));
 }
 
 .commentInput {
