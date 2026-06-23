@@ -28,7 +28,10 @@ export default function LoginPage() {
   return (
     <div className={styles.container}>
       <div className={styles.card}>
-        <h1 className={styles.title}>ログイン</h1>
+        <div className={styles.logo}>
+          <div className={styles.logoMark}>3s</div>
+          <h1 className={styles.title}>3seconds</h1>
+        </div>
         <p className={styles.subtitle}>3秒でつながる、3秒で伝わる</p>
 
         <form onSubmit={handleSubmit} className={styles.form}>

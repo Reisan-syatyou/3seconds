@@ -45,10 +45,12 @@ export default function ProfilePage() {
     <div className={styles.page}>
       <div className={styles.header}>
         <div className={styles.avatar}>
-          {profile?.avatar_url
-            ? <img src={profile.avatar_url} alt={profile.username} />
-            : <span>{profile?.username?.[0]?.toUpperCase() ?? '?'}</span>
-          }
+          <div className={styles.avatarInner}>
+            {profile?.avatar_url
+              ? <img src={profile.avatar_url} alt={profile.username} />
+              : <span>{profile?.username?.[0]?.toUpperCase() ?? '?'}</span>
+            }
+          </div>
         </div>
         <h2 className={styles.username}>@{profile?.username ?? 'unknown'}</h2>
         {profile?.bio && <p className={styles.bio}>{profile.bio}</p>}

@@ -24,51 +24,146 @@
 
 .overlay {
   position: absolute;
-  bottom: 72px;
+  bottom: 0;
   left: 0;
-  right: 0;
-  padding: 32px 16px 12px;
-  background: linear-gradient(transparent, rgba(0, 0, 0, 0.65));
+  right: 80px;
+  padding: 80px 16px 80px;
+  background: linear-gradient(
+    transparent 0%,
+    rgba(0, 0, 0, 0.2) 40%,
+    rgba(0, 0, 0, 0.75) 100%
+  );
   pointer-events: none;
 }
 
 .username {
   color: #fff;
-  font-weight: 600;
-  font-size: 0.95rem;
-  margin: 0 0 4px;
+  font-weight: 700;
+  font-size: 1rem;
+  margin: 0 0 6px;
+  text-shadow: 0 1px 4px rgba(0,0,0,0.5);
 }
 
 .caption {
-  color: #e0e0e0;
-  font-size: 0.875rem;
+  color: rgba(255, 255, 255, 0.88);
+  font-size: 0.9rem;
   margin: 0;
-  line-height: 1.4;
+  line-height: 1.5;
+  text-shadow: 0 1px 3px rgba(0,0,0,0.5);
 }
 
 .muteBtn {
   position: absolute;
   top: 16px;
   right: 16px;
-  background: rgba(0, 0, 0, 0.55);
-  border: none;
+  background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  border: 1px solid rgba(255, 255, 255, 0.15);
   border-radius: 50%;
-  width: 38px;
-  height: 38px;
+  width: 40px;
+  height: 40px;
   cursor: pointer;
   color: #fff;
   display: flex;
   align-items: center;
   justify-content: center;
   z-index: 10;
+  transition: background 0.15s;
+}
+
+.muteBtn:hover {
+  background: rgba(0, 0, 0, 0.7);
+}
+
+/* Right-side action buttons */
+.actions {
+  position: absolute;
+  right: 12px;
+  bottom: 90px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+  z-index: 10;
+}
+
+.likeBtn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: rgba(255, 255, 255, 0.9);
+  padding: 0;
+  filter: drop-shadow(0 1px 4px rgba(0,0,0,0.6));
+  transition: transform 0.1s;
+}
+
+.likeBtn:hover {
+  transform: scale(1.1);
+}
+
+.likeBtnActive {
+  color: #ff4d6d;
+}
+
+.heartIcon {
+  transition: transform 0.15s;
+}
+
+@keyframes heartPop {
+  0%   { transform: scale(1); }
+  40%  { transform: scale(1.4); }
+  70%  { transform: scale(0.9); }
+  100% { transform: scale(1); }
+}
+
+.heartPop {
+  animation: heartPop 0.35s ease forwards;
+}
+
+.likeCount {
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: #fff;
+  text-shadow: 0 1px 3px rgba(0,0,0,0.7);
+  min-height: 16px;
+}
+
+.pauseIcon {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+  z-index: 20;
+  background: rgba(0, 0, 0, 0.35);
+  border-radius: 50%;
+  width: 80px;
+  height: 80px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: iconFade 0.8s ease forwards;
+}
+
+@keyframes iconFade {
+  0%   { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+  60%  { opacity: 1; transform: translate(-50%, -50%) scale(1.1); }
+  100% { opacity: 0; transform: translate(-50%, -50%) scale(0.9); }
 }
 
 .center {
   height: 100vh;
+  height: 100dvh;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  background: #0f0f0f;
-  color: #888;
+  background: #0a0a0a;
+  color: #555;
+  gap: 8px;
 }

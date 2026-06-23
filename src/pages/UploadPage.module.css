@@ -1,12 +1,13 @@
 .page {
   min-height: 100vh;
-  background: #0f0f0f;
+  min-height: 100dvh;
+  background: #0a0a0a;
   padding: 1.5rem 1rem 80px;
   color: #fff;
 }
 
 .title {
-  font-size: 1.25rem;
+  font-size: 1.1rem;
   font-weight: 700;
   margin: 0 0 1.5rem;
   text-align: center;
@@ -22,21 +23,22 @@
 }
 
 .dropzone {
-  border: 2px dashed #2a2a2a;
-  border-radius: 12px;
+  border: 2px dashed #282828;
+  border-radius: 16px;
   overflow: hidden;
   cursor: pointer;
-  background: #1a1a1a;
+  background: #141414;
   min-height: 240px;
   display: flex;
   align-items: center;
   justify-content: center;
   position: relative;
-  transition: border-color 0.15s;
+  transition: border-color 0.2s, background 0.2s;
 }
 
 .dropzone:hover {
   border-color: #ff4d6d;
+  background: #1a1010;
 }
 
 .placeholder {
@@ -48,13 +50,17 @@
 }
 
 .placeholderText {
-  color: #888;
+  color: #666;
   font-size: 0.95rem;
 }
 
 .hint {
-  color: #444;
+  color: #ff4d6d;
   font-size: 0.8rem;
+  font-weight: 500;
+  background: rgba(255, 77, 109, 0.1);
+  padding: 2px 10px;
+  border-radius: 20px;
 }
 
 .preview {
@@ -65,23 +71,244 @@
   display: block;
 }
 
+.trimBadge {
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  background: rgba(255, 77, 109, 0.85);
+  color: #fff;
+  font-size: 0.7rem;
+  font-weight: 600;
+  padding: 3px 10px;
+  border-radius: 20px;
+  pointer-events: none;
+}
+
 .removeBtn {
   position: absolute;
   top: 8px;
   right: 8px;
-  background: rgba(0, 0, 0, 0.7);
-  border: 1px solid #444;
-  border-radius: 6px;
+  background: rgba(0, 0, 0, 0.75);
+  backdrop-filter: blur(6px);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 8px;
   color: #fff;
   font-size: 0.8rem;
-  padding: 4px 10px;
+  padding: 4px 12px;
   cursor: pointer;
+  font-family: inherit;
+  transition: background 0.15s;
+}
+
+.removeBtn:hover {
+  background: rgba(255, 77, 109, 0.7);
 }
 
 .hiddenInput {
   display: none;
 }
 
+/* Trim toggle button */
+.trimToggleBtn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  background: #1a1a1a;
+  border: 1px solid #2a2a2a;
+  border-radius: 10px;
+  color: #aaa;
+  cursor: pointer;
+  font-size: 0.875rem;
+  font-weight: 500;
+  padding: 0.6rem;
+  transition: border-color 0.15s, color 0.15s;
+  font-family: inherit;
+  width: 100%;
+}
+
+.trimToggleBtn:hover {
+  border-color: #ff4d6d;
+  color: #ff4d6d;
+}
+
+/* Trim panel */
+.trimPanel {
+  background: #141414;
+  border: 1px solid #252525;
+  border-radius: 16px;
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.trimHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.trimLabel {
+  font-size: 0.8rem;
+  color: #888;
+  font-weight: 500;
+}
+
+.trimDuration {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #ff4d6d;
+  background: rgba(255, 77, 109, 0.1);
+  padding: 2px 8px;
+  border-radius: 20px;
+}
+
+.trimDurationOver {
+  color: #ff4444;
+  background: rgba(255, 68, 68, 0.15);
+}
+
+.trimVideoPreview {
+  width: 100%;
+  max-height: 200px;
+  object-fit: contain;
+  border-radius: 8px;
+  background: #000;
+}
+
+/* Dual range slider */
+.trimSlider {
+  position: relative;
+  height: 36px;
+  display: flex;
+  align-items: center;
+}
+
+.trimSlider::before {
+  content: '';
+  position: absolute;
+  width: 100%;
+  height: 4px;
+  background: #2a2a2a;
+  border-radius: 2px;
+}
+
+.trimFill {
+  position: absolute;
+  height: 4px;
+  background: #ff4d6d;
+  border-radius: 2px;
+  pointer-events: none;
+  z-index: 2;
+}
+
+.rangeInput {
+  position: absolute;
+  width: 100%;
+  appearance: none;
+  -webkit-appearance: none;
+  background: transparent;
+  pointer-events: none;
+  height: 4px;
+  outline: none;
+}
+
+.rangeInput::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: #ff4d6d;
+  cursor: pointer;
+  pointer-events: all;
+  border: 2.5px solid #fff;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+  transition: transform 0.1s;
+}
+
+.rangeInput::-webkit-slider-thumb:hover {
+  transform: scale(1.15);
+}
+
+.rangeInput::-moz-range-thumb {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: #ff4d6d;
+  cursor: pointer;
+  pointer-events: all;
+  border: 2.5px solid #fff;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+}
+
+.trimTimes {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.75rem;
+  color: #555;
+  font-variant-numeric: tabular-nums;
+  margin-top: -4px;
+}
+
+.trimWarning {
+  color: #ff4444;
+  font-size: 0.8rem;
+  text-align: center;
+  margin: 0;
+}
+
+.trimActions {
+  display: flex;
+  gap: 8px;
+}
+
+.trimCancelBtn {
+  flex: 1;
+  background: transparent;
+  border: 1px solid #2a2a2a;
+  border-radius: 10px;
+  color: #666;
+  cursor: pointer;
+  font-size: 0.875rem;
+  padding: 0.6rem;
+  font-family: inherit;
+  transition: border-color 0.15s, color 0.15s;
+}
+
+.trimCancelBtn:hover {
+  border-color: #444;
+  color: #aaa;
+}
+
+.trimConfirmBtn {
+  flex: 2;
+  background: linear-gradient(135deg, #ff4d6d, #ff6b5b);
+  border: none;
+  border-radius: 10px;
+  color: #fff;
+  cursor: pointer;
+  font-size: 0.875rem;
+  font-weight: 700;
+  padding: 0.6rem;
+  font-family: inherit;
+  transition: opacity 0.15s, transform 0.1s;
+}
+
+.trimConfirmBtn:hover:not(:disabled) {
+  opacity: 0.9;
+}
+
+.trimConfirmBtn:active:not(:disabled) {
+  transform: scale(0.98);
+}
+
+.trimConfirmBtn:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
+
+/* Caption field */
 .field {
   display: flex;
   flex-direction: column;
@@ -89,20 +316,21 @@
 }
 
 .field label {
-  font-size: 0.875rem;
-  color: #aaa;
+  font-size: 0.8rem;
+  color: #777;
   font-weight: 500;
 }
 
 .field input {
-  background: #1a1a1a;
-  border: 1px solid #2a2a2a;
-  border-radius: 8px;
+  background: #141414;
+  border: 1px solid #252525;
+  border-radius: 10px;
   color: #fff;
   font-size: 1rem;
-  padding: 0.65rem 0.875rem;
+  padding: 0.7rem 0.875rem;
   outline: none;
   transition: border-color 0.15s;
+  font-family: inherit;
 }
 
 .field input:focus {
@@ -110,40 +338,46 @@
 }
 
 .field input::placeholder {
-  color: #444;
+  color: #3a3a3a;
 }
 
 .charCount {
   font-size: 0.75rem;
-  color: #444;
+  color: #3a3a3a;
   text-align: right;
 }
 
 .button {
-  background: #ff4d6d;
+  background: linear-gradient(135deg, #ff4d6d, #ff6b5b);
   border: none;
-  border-radius: 8px;
+  border-radius: 10px;
   color: #fff;
   cursor: pointer;
   font-size: 1rem;
-  font-weight: 600;
-  padding: 0.75rem;
-  transition: background 0.15s, opacity 0.15s;
+  font-weight: 700;
+  padding: 0.8rem;
+  transition: opacity 0.15s, transform 0.1s;
+  font-family: inherit;
+  letter-spacing: 0.2px;
 }
 
 .button:hover:not(:disabled) {
-  background: #e63757;
+  opacity: 0.9;
+}
+
+.button:active:not(:disabled) {
+  transform: scale(0.98);
 }
 
 .button:disabled {
-  opacity: 0.4;
+  opacity: 0.35;
   cursor: not-allowed;
 }
 
 .error {
-  background: #2a1010;
-  border: 1px solid #5a2020;
-  border-radius: 8px;
+  background: rgba(255, 77, 109, 0.1);
+  border: 1px solid rgba(255, 77, 109, 0.3);
+  border-radius: 10px;
   color: #ff6b6b;
   font-size: 0.875rem;
   padding: 0.6rem 0.875rem;

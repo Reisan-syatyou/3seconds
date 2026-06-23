@@ -8,10 +8,12 @@ export function AuthProvider({ children }) {
   const [loading, setLoading] = useState(true)
 
   async function ensureProfile(u) {
-    const { data } = await supabase.from('profiles').select('id').eq('id', u.id).single()
+    const { data, error: selectError } = await supabase.from('profiles').select('id').eq('id', u.id).single()
+    console.log('[ensureProfile] select:', data, selectError)
     if (!data) {
       const username = u.email.split('@')[0].replace(/[^a-z0-9_]/gi, '_').slice(0, 20)
-      await supabase.from('profiles').insert({ id: u.id, username })
+      const { error: insertError } = await supabase.from('profiles').insert({ id: u.id, username })
+      console.log('[ensureProfile] insert error:', insertError)
     }
   }
 
