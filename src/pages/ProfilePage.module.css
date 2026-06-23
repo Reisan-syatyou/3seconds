@@ -73,21 +73,63 @@
   line-height: 1.5;
 }
 
-.postCount {
-  font-size: 0.875rem;
-  color: #555;
-  margin: 0;
+/* Stats row */
+.stats {
+  display: flex;
+  gap: 32px;
+  margin: 8px 0 4px;
+}
+
+.stat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+}
+
+.statNum {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #fff;
+}
+
+.statLabel {
+  font-size: 0.72rem;
+  color: #666;
+}
+
+/* Buttons */
+.btnRow {
+  display: flex;
+  gap: 10px;
+  margin-top: 6px;
+}
+
+.editBtn {
+  background: transparent;
+  border: 1px solid #333;
+  border-radius: 20px;
+  color: #ccc;
+  cursor: pointer;
+  font-size: 0.85rem;
+  padding: 8px 22px;
+  transition: border-color 0.15s, color 0.15s;
+  font-family: inherit;
+}
+
+.editBtn:hover {
+  border-color: #fff;
+  color: #fff;
 }
 
 .signOutBtn {
-  margin-top: 10px;
   background: transparent;
   border: 1px solid #2a2a2a;
   border-radius: 20px;
-  color: #666;
+  color: #555;
   cursor: pointer;
   font-size: 0.8rem;
-  padding: 6px 22px;
+  padding: 8px 18px;
   transition: border-color 0.15s, color 0.15s;
   font-family: inherit;
 }
@@ -97,6 +139,37 @@
   color: #ff4d6d;
 }
 
+.followBtn {
+  background: #ff4d6d;
+  border: none;
+  border-radius: 20px;
+  color: #fff;
+  cursor: pointer;
+  font-size: 0.9rem;
+  font-weight: 700;
+  padding: 10px 40px;
+  margin-top: 6px;
+  transition: opacity 0.15s;
+  font-family: inherit;
+}
+
+.followBtn:hover {
+  opacity: 0.85;
+}
+
+.followBtnActive {
+  background: transparent;
+  border: 1px solid #444;
+  color: #888;
+}
+
+.followBtnActive:hover {
+  border-color: #ff4d6d;
+  color: #ff4d6d;
+  opacity: 1;
+}
+
+/* Grid */
 .empty {
   text-align: center;
   color: #444;
@@ -138,6 +211,7 @@
   pointer-events: none;
 }
 
+/* Video modal */
 .modal {
   position: fixed;
   inset: 0;
@@ -190,4 +264,135 @@
 .closeBtn:hover {
   color: #fff;
   border-color: #444;
+}
+
+/* Edit modal */
+.modalOverlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.7);
+  z-index: 300;
+  display: flex;
+  align-items: flex-end;
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+}
+
+.editModal {
+  width: 100%;
+  background: #1a1a1a;
+  border-radius: 20px 20px 0 0;
+  padding: 24px 20px max(24px, env(safe-area-inset-bottom));
+  animation: slideUp 0.28s cubic-bezier(0.32, 0.72, 0, 1) forwards;
+}
+
+@keyframes slideUp {
+  from { transform: translateY(100%); }
+  to   { transform: translateY(0); }
+}
+
+.editTitle {
+  font-size: 1rem;
+  font-weight: 700;
+  color: #fff;
+  text-align: center;
+  margin: 0 0 20px;
+}
+
+.editLabel {
+  display: block;
+  font-size: 0.8rem;
+  color: #666;
+  margin-bottom: 6px;
+}
+
+.editInput {
+  width: 100%;
+  background: rgba(255,255,255,0.07);
+  border: 1px solid rgba(255,255,255,0.12);
+  border-radius: 10px;
+  padding: 10px 14px;
+  color: #fff;
+  font-size: 0.95rem;
+  outline: none;
+  margin-bottom: 16px;
+  box-sizing: border-box;
+  font-family: inherit;
+  transition: border-color 0.15s;
+}
+
+.editInput:focus {
+  border-color: rgba(255,255,255,0.3);
+}
+
+.editTextarea {
+  width: 100%;
+  background: rgba(255,255,255,0.07);
+  border: 1px solid rgba(255,255,255,0.12);
+  border-radius: 10px;
+  padding: 10px 14px;
+  color: #fff;
+  font-size: 0.95rem;
+  outline: none;
+  resize: none;
+  margin-bottom: 16px;
+  box-sizing: border-box;
+  font-family: inherit;
+  line-height: 1.5;
+  transition: border-color 0.15s;
+}
+
+.editTextarea:focus {
+  border-color: rgba(255,255,255,0.3);
+}
+
+.editTextarea::placeholder {
+  color: rgba(255,255,255,0.25);
+}
+
+.editError {
+  color: #ff4d6d;
+  font-size: 0.8rem;
+  margin: -8px 0 12px;
+}
+
+.editBtns {
+  display: flex;
+  gap: 10px;
+}
+
+.editCancelBtn {
+  flex: 1;
+  background: transparent;
+  border: 1px solid #333;
+  border-radius: 20px;
+  color: #777;
+  cursor: pointer;
+  font-size: 0.9rem;
+  padding: 12px;
+  font-family: inherit;
+  transition: border-color 0.15s;
+}
+
+.editCancelBtn:hover {
+  border-color: #555;
+}
+
+.editSaveBtn {
+  flex: 1;
+  background: #ff4d6d;
+  border: none;
+  border-radius: 20px;
+  color: #fff;
+  cursor: pointer;
+  font-size: 0.9rem;
+  font-weight: 700;
+  padding: 12px;
+  font-family: inherit;
+  transition: opacity 0.15s;
+}
+
+.editSaveBtn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
 }

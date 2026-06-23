@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState, useCallback } from 'react'
+import { Link } from 'react-router-dom'
 import { supabase } from '../lib/supabase'
 import { useAuth } from '../contexts/AuthContext'
 import BottomNav from '../components/BottomNav'
@@ -226,7 +227,9 @@ function VideoCard({ post, likeCount, liked, onToggleLike, commentCount, onOpenC
       </div>
 
       <div className={styles.overlay}>
-        <p className={styles.username}>@{post.profiles?.username ?? 'unknown'}</p>
+        <Link to={`/profile/${post.user_id}`} className={styles.username}>
+          @{post.profiles?.username ?? 'unknown'}
+        </Link>
         {post.caption && <p className={styles.caption}>{post.caption}</p>}
       </div>
     </div>

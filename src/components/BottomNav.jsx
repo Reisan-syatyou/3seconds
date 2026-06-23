@@ -15,6 +15,14 @@ export default function BottomNav() {
         <span>フィード</span>
       </Link>
 
+      <Link to="/search" className={`${styles.item} ${pathname === '/search' ? styles.active : ''}`}>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" width="22" height="22">
+          <circle cx="11" cy="11" r="8"/>
+          <path d="m21 21-4.35-4.35"/>
+        </svg>
+        <span>検索</span>
+      </Link>
+
       <Link to="/upload" className={`${styles.item} ${pathname === '/upload' ? styles.active : ''}`}>
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" width="22" height="22">
           <circle cx="12" cy="12" r="10"/>

@@ -5,6 +5,7 @@ import RegisterPage from './pages/RegisterPage'
 import FeedPage from './pages/FeedPage'
 import UploadPage from './pages/UploadPage'
 import ProfilePage from './pages/ProfilePage'
+import SearchPage from './pages/SearchPage'
 
 function PrivateRoute({ children }) {
   const { user, loading } = useAuth()
@@ -26,6 +27,7 @@ export default function App() {
           <Route path="/login" element={<PublicRoute><LoginPage /></PublicRoute>} />
           <Route path="/register" element={<PublicRoute><RegisterPage /></PublicRoute>} />
           <Route path="/" element={<PrivateRoute><FeedPage /></PrivateRoute>} />
+          <Route path="/search" element={<PrivateRoute><SearchPage /></PrivateRoute>} />
           <Route path="/upload" element={<PrivateRoute><UploadPage /></PrivateRoute>} />
           <Route path="/profile" element={<PrivateRoute><ProfilePage /></PrivateRoute>} />
           <Route path="/profile/:userId" element={<PrivateRoute><ProfilePage /></PrivateRoute>} />
